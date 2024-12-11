@@ -42,7 +42,7 @@ class OrderController extends Controller {
     }
   }
 
-  // Store: Menambahkan order dan order items  
+  // Store: Menambahkan order dan order items
   Future<Response> store(Request request) async {
     try {
       var custId = request.input('cust_id');
@@ -154,7 +154,7 @@ class OrderController extends Controller {
       await Order().query().where('order_num', '=', orderNum).delete();
 
       return Response.json(
-          ResponseHelper.success(null, "Berhasil menghapus order"));
+          ResponseHelper.success(order, "Berhasil menghapus order"));
     } catch (e) {
       return Response.json(ResponseHelper.error());
     }

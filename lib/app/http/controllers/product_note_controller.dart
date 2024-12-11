@@ -18,11 +18,10 @@ class ProductNoteController extends Controller {
   Future<Response> store(Request request) async {
     try {
       var prodId = request.input('prod_id');
-      var noteDate = request.input('note_date');
       var noteText = request.input('note_text');
 
       // Validasi input
-      if (prodId == null || noteDate == null || noteText == null) {
+      if (prodId == null || noteText == null) {
         return Response.json(
             ResponseHelper.invalid('Harap isi semua data'), 400);
       }
@@ -40,7 +39,7 @@ class ProductNoteController extends Controller {
       await ProductNote().query().insert({
         'note_id': noteId,
         'prod_id': prodId,
-        'note_date': noteDate,
+        'note_date': DateTime.now().toIso8601String(),
         'note_text': noteText,
         'created_at': DateTime.now().toIso8601String(),
         'updated_at': DateTime.now().toIso8601String(),
@@ -74,11 +73,10 @@ class ProductNoteController extends Controller {
   Future<Response> update(Request request, String id) async {
     try {
       var prodId = request.input('prod_id');
-      var noteDate = request.input('note_date');
       var noteText = request.input('note_text');
 
       // Validasi input
-      if (prodId == null || noteDate == null || noteText == null) {
+      if (prodId == null || noteText == null) {
         return Response.json(
             ResponseHelper.invalid('Harap isi semua data'), 400);
       }
@@ -99,8 +97,7 @@ class ProductNoteController extends Controller {
 
       // Update data catatan produk
       await ProductNote().query().where('note_id', '=', id).update({
-        'prod_id': prodId,
-        'note_date': noteDate,
+        'prod_id': prodId,        
         'note_text': noteText,
         'updated_at': DateTime.now().toIso8601String(),
       });

@@ -4,7 +4,6 @@ import 'package:mycommmerce/app/http/controllers/product_controller.dart';
 import 'package:mycommmerce/app/http/controllers/product_note_controller.dart';
 import 'package:mycommmerce/app/http/controllers/vendor_controller.dart';
 import 'package:vania/vania.dart';
-import 'package:mycommmerce/app/http/middleware/error_response_middleware.dart';
 
 class ApiRoute implements Route {
   @override
@@ -46,12 +45,8 @@ class ApiRoute implements Route {
     Router.group(() {
       Router.get('/', orderController.index);
       Router.post('/', orderController.store);
-      Router.get('/{id}', orderController.show);      
+      Router.get('/{id}', orderController.show);
       Router.delete('/{id}', orderController.destroy);
     }, prefix: '/orders');
-
-    Router.get('wrong-request',
-            () => Response.json({'message': 'Hi wrong request'}))
-        .middleware([ErrorResponseMiddleware()]);
   }
 }

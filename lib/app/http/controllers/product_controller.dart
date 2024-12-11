@@ -1,5 +1,6 @@
 import 'package:mycommmerce/app/helpers/response_helper.dart';
 import 'package:mycommmerce/app/models/product.dart';
+import 'package:mycommmerce/app/models/product_note.dart';
 import 'package:mycommmerce/app/models/vendor.dart';
 import 'package:vania/vania.dart';
 
@@ -61,11 +62,33 @@ class ProductController extends Controller {
   // Show: Menampilkan produk berdasarkan ID
   Future<Response> show(String id) async {
     try {
-      var product = await Product().query().where('prod_id', '=', id).first();
+      var product = await Product()
+          .query()
+          .join('vendors', 'products.vend_id', '=', 'vendors.vend_id')
+          .select([
+            'products.*',
+            'vendors.vend_name as vendor_name',
+            'vendors.vend_address as vendor_address'
+          ])
+          .where('prod_id', '=', id)
+          .first();
       if (product == null) {
         return Response.json(ResponseHelper.notFound(), 404);
       }
-      return Response.json(ResponseHelper.success(product));
+      var productNotes =
+          await ProductNote().query().where("prod_id", "=", id).get();
+      return Response.json(ResponseHelper.success({
+        'prod_id': product['prod_id'],
+        'name': product['prod_name'],
+        'price': product['prod_price'],
+        'desc': product['prod_desc'],
+        'vendor': {
+          'vend_id': product['vend_id'],
+          'name': product['vendor_name'],
+          'address': product['vendor_address']
+        },
+        'product_notes': productNotes
+      }));
     } catch (e) {
       return Response.json(ResponseHelper.error(), 500);
     }

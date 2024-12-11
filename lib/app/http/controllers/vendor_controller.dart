@@ -1,4 +1,5 @@
 import 'package:mycommmerce/app/helpers/response_helper.dart';
+import 'package:mycommmerce/app/models/product.dart';
 import 'package:mycommmerce/app/models/vendor.dart';
 import 'package:vania/vania.dart';
 
@@ -30,7 +31,8 @@ class VendorController extends Controller {
           state == null ||
           zip == null ||
           country == null) {
-        return Response.json(ResponseHelper.invalid('Harap isi semua data'), 400);
+        return Response.json(
+            ResponseHelper.invalid('Harap isi semua data'), 400);
       }
 
       // Generate ID dan simpan vendor
@@ -49,7 +51,8 @@ class VendorController extends Controller {
 
       // Ambil data yang baru saja disimpan
       var data = await Vendor().query().where('vend_id', '=', vendId).first();
-      return Response.json(ResponseHelper.success(data, "Berhasil menambahkan vendor"));
+      return Response.json(
+          ResponseHelper.success(data, "Berhasil menambahkan vendor"));
     } catch (e) {
       print(e);
       return Response.json(ResponseHelper.error());
@@ -63,6 +66,8 @@ class VendorController extends Controller {
       if (vendor == null) {
         return Response.json(ResponseHelper.notFound(), 404);
       }
+      var products = await Product().query().where('vend_id', '=', id).get();
+      vendor['products'] = products;
       return Response.json(ResponseHelper.success(vendor));
     } catch (e) {
       return Response.json(ResponseHelper.error(), 500);
@@ -86,7 +91,8 @@ class VendorController extends Controller {
           state == null ||
           zip == null ||
           country == null) {
-        return Response.json(ResponseHelper.invalid('Harap isi semua data'), 400);
+        return Response.json(
+            ResponseHelper.invalid('Harap isi semua data'), 400);
       }
 
       // Cek apakah vendor ada
@@ -108,7 +114,8 @@ class VendorController extends Controller {
 
       // Ambil data yang sudah diupdate
       var data = await Vendor().query().where('vend_id', '=', id).first();
-      return Response.json(ResponseHelper.success(data, "Berhasil mengupdate data vendor"));
+      return Response.json(
+          ResponseHelper.success(data, "Berhasil mengupdate data vendor"));
     } catch (e) {
       return Response.json(ResponseHelper.error());
     }
@@ -121,10 +128,11 @@ class VendorController extends Controller {
       if (data == null) {
         return Response.json(ResponseHelper.notFound(), 404);
       }
-      
+
       // Hapus data vendor
       await Vendor().query().where('vend_id', '=', id).delete();
-      return Response.json(ResponseHelper.success(data, "Berhasil menghapus data vendor"));
+      return Response.json(
+          ResponseHelper.success(data, "Berhasil menghapus data vendor"));
     } catch (e) {
       return Response.json(ResponseHelper.error());
     }
