@@ -1,3 +1,4 @@
+import 'package:mycommmerce/app/http/controllers/auth_controller.dart';
 import 'package:mycommmerce/app/http/controllers/customer_controller.dart';
 import 'package:mycommmerce/app/http/controllers/order_controller.dart';
 import 'package:mycommmerce/app/http/controllers/product_controller.dart';
@@ -48,5 +49,9 @@ class ApiRoute implements Route {
       Router.get('/{id}', orderController.show);
       Router.delete('/{id}', orderController.destroy);
     }, prefix: '/orders');
+
+    Router.group(() {
+      Router.post('/', authController.login);
+    }, prefix: '/auth');
   }
 }

@@ -13,6 +13,9 @@ class CreateCustomersTable extends Migration {
       string('cust_zip', length: 7);
       string('cust_country', length: 25);
       string('cust_telp', length: 15);
+      string('email', length: 50);
+      text('password');
+      string('refresh_token', length: 255);
       timeStamps();
     });
   }
